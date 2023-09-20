@@ -1,12 +1,12 @@
 require('dotenv').config()
 //usamos para definir endpoints
-//para receber reuisições HTTP
+//para receber reuisições HTTP e retornar respostas HTTP 
 const express = require('express');
-//usamos para enviar requisições HTTP
+//usamos para enviar requisições HTTP para outros serviços (APIs) 
 const axios = require('axios');
 const app = express();
 
-//middleware (função que fica no meio do caminho)
+//middleware (função que fica no meio do caminho da requisição e da resposta) 
 //middleware
 app.use(express.json())
 
@@ -19,8 +19,8 @@ app.use(express.json())
 const lembretes = {}
 let id = 1
 
-//endpoints abaixo
-//GET /lembretes
+//endpoints abaixo (GET, POST)
+//GET /lembretes 
 app.get('/lembretes', (req, res) => {
     res.send(lembretes)
 })
@@ -28,8 +28,11 @@ app.get('/lembretes', (req, res) => {
 //POST /lembretes {texto: "Fazer café"} 
 app.post('/lembretes', (req, res) => {
     const texto = req.body.texto
-    lembretes[id] = {id: texto}
+    const lembrete = {id, texto: texto}
+    lembretes[id] = lembrete
     id++
+    // HTTP 201 Created
+    res.status(201).send(lembretes)
 })
 
-app.listen(process.env.PORT, () => console.log(`Lembretes: ${process.env.PORT}`))
+app.listen(process.env.PORT, () => console.log(`Lembretes: ${process.env.PORT}`)) 
